@@ -1,0 +1,329 @@
+//AUTHOR: Daniel Conley
+//COURSE: CPT187
+//CREATE DATE: 2/20/2022
+//PURPOSE: The full details of this class would be described as to form the inventory for the employee. That is, it keeps in inventory.  An inventory being a thing that keeps track of the stock.  Kind of like a warehouse, used to store things, but digital.  
+
+
+//Initializing Package
+package edu.cpt187.conley.project6;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Scanner;
+
+//Declaring Class
+public class PrintInventory 
+{
+	//Declaring Class Constants
+	private final int RESET = 0;                                        //The reset value
+	private final int MAXIMUM_RECORDS = 75;                             //The maximum number of records
+	private final int NOT_FOUND = -1;                                   //The not found integer
+	private final int ONE = 1;                                          //The value of one
+
+	private String[] printSubjects = new String[MAXIMUM_RECORDS];       //The array for subjects
+	private String[] printVerbs = new String[MAXIMUM_RECORDS];          //The array for Verbs
+	private String[] printPrepositions = new String[MAXIMUM_RECORDS];   //The array for Preopositions
+	private String[] printObjects = new String[MAXIMUM_RECORDS];        //The array for Objects
+	private int[] printLengths = new int[MAXIMUM_RECORDS];              //The array for Lengths
+	private int[] orderQuantities = new int[MAXIMUM_RECORDS];           //The array for quantities
+	private double[] orderTotals = new double[MAXIMUM_RECORDS];         //The array for totals
+	private int recordCount = 0;                                        //The amount of records
+	private int searchedIndex = 0;                                      //The index for searched items
+	private int fileCount = 0;                                          //The amount of files
+	private int filesFound = 0;                                         //The amount of files found
+	private int searchCount = 0;                                        //The amount of searches
+	private int searchesFound = 0;                                      //The amount of searches found
+
+	//Declaring Inventory
+	public PrintInventory()
+	{
+	}//End of declaring print inventory
+
+	//Start of Setters
+	public void setPrintArrays(String borrowedFileName)
+	{
+		try
+		{
+			fileCount++;
+			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
+			filesFound++;
+			recordCount = RESET;
+
+
+			while (infile.hasNext() == true && recordCount < MAXIMUM_RECORDS)
+			{
+
+				printSubjects[recordCount] = infile.next();
+				printVerbs[recordCount] = infile.next();
+				printPrepositions[recordCount] = infile.next();
+				printObjects[recordCount] = infile.next();
+				recordCount++;
+			}//End of While
+			infile.close();
+			setBubbleSort();
+			getBinSearch(borrowedFileName);
+		}//End of Try
+		catch (IOException ex)
+		{
+			recordCount = NOT_FOUND;
+		}//End of Catch
+	}//End of Setter
+
+	public void setPrintArrays(String borrowedFileName, int borrowedSize)
+	{
+		try
+		{
+			fileCount++;
+			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
+			filesFound++;
+			recordCount = RESET;
+
+
+			while (infile.hasNext() == true && recordCount < MAXIMUM_RECORDS && recordCount < borrowedSize)
+			{
+				printSubjects[recordCount] = infile.next();
+				printVerbs[recordCount] = infile.next();
+				printPrepositions[recordCount] = infile.next();
+				printObjects[recordCount] = infile.next();
+				recordCount++;
+			}//End of While
+			infile.close();
+			setBubbleSort();
+			getBinSearch(borrowedFileName);
+
+
+		}//End of Try
+		catch (IOException ex)
+		{
+			recordCount = NOT_FOUND;
+		}//End of Catch
+	}//End of Setter
+
+	public void setResetSearchCounts()
+	{
+		searchCount = RESET;
+		searchesFound = RESET;
+	}//End of Setter
+
+	public void setSearchedIndex(String borrowedSubject)
+	{
+		searchedIndex = Integer.parseInt(borrowedSubject);
+	}//End of Setter
+
+	public void setBubbleSort()
+	{
+		int localLast = recordCount - ONE;
+		final int ZERO = 0;
+		int localIndex = 0;
+		boolean localSwap = false;
+		while (localLast > ZERO)
+		{
+			localIndex = 0;
+			localSwap = false;
+			while (localIndex < localLast)
+			{
+				if (printSubjects[localIndex].compareToIgnoreCase(printSubjects[localIndex+ONE]) > 0)
+				{
+					setSwapArrayElements(localIndex);
+					localSwap = true;
+				}//end of if
+				localIndex++;
+			}//End of while
+			if (localSwap == false)
+			{
+				localLast = ZERO;
+			}//End of if
+			else
+			{
+				localLast--;
+			}//End of else
+		}//End of while
+
+	}//End of Setter
+
+	public void setSwapArrayElements(int borrowedIndex)
+	{
+		double aLocalDouble = 0;
+		String aLocalString = " ";
+		int aLocalInt = ' ';
+
+		aLocalDouble = orderTotals[borrowedIndex];
+		orderTotals[borrowedIndex] = orderTotals[borrowedIndex + ONE];
+		orderTotals[borrowedIndex + ONE] = aLocalDouble;
+
+		aLocalString = printSubjects[borrowedIndex];
+		printSubjects[borrowedIndex] = printSubjects[borrowedIndex + ONE];
+		printSubjects[borrowedIndex + ONE] = aLocalString;
+
+		aLocalString = printVerbs[borrowedIndex];
+		printVerbs[borrowedIndex] = printVerbs[borrowedIndex + ONE];
+		printVerbs[borrowedIndex + ONE] = aLocalString;
+
+		aLocalString = printPrepositions[borrowedIndex];
+		printPrepositions[borrowedIndex] = printPrepositions[borrowedIndex + ONE];
+		printPrepositions[borrowedIndex + ONE] = aLocalString;
+
+		aLocalString = printObjects[borrowedIndex];
+		printObjects[borrowedIndex] = printObjects[borrowedIndex + ONE];
+		printObjects[borrowedIndex + ONE] = aLocalString;
+
+		aLocalInt = printLengths[borrowedIndex];
+		printLengths[borrowedIndex] = printLengths[borrowedIndex + ONE];
+		printLengths[borrowedIndex + ONE] = aLocalInt;
+
+		aLocalInt = orderQuantities[borrowedIndex];
+		orderQuantities[borrowedIndex] = orderQuantities[borrowedIndex + ONE];
+		orderQuantities[borrowedIndex + ONE] = aLocalInt;
+	}//End of Setter
+
+	//End of Setters
+
+	//Start of Getters
+
+	public int getBinSearch(String borrowedBorrowedSubject)
+	{
+		final int TWO = 2;
+
+		int localLast = recordCount - ONE;
+		int localMid = 0;
+		int localFirst = recordCount;
+		boolean localFound = false;
+
+		searchCount++;
+		while (localFirst <= localLast && localFound == false)
+		{
+			localMid = (localFirst + localLast) / TWO;
+			if(printSubjects[localMid].equalsIgnoreCase(borrowedBorrowedSubject) == true)
+			{
+				localFound = true;
+				searchesFound++;
+			}//End of If
+			else
+			{
+				if(printSubjects[localMid].compareToIgnoreCase(borrowedBorrowedSubject) < 0)
+				{
+					localFirst = localMid + ONE;
+				}//End of if
+				else
+				{
+					localLast = localMid - ONE;
+				}//End of else
+			}//End of Else
+		}//End of while
+		if (localFound == false)
+		{
+			localMid = NOT_FOUND;
+		}//End of if
+		return localMid;
+
+	}//End of Getter
+
+	public int getMaximumRecords()
+	{
+		return MAXIMUM_RECORDS;
+	}//End of Getter
+
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//End of Getter
+
+	public int getSearchedIndex()
+	{
+		return searchedIndex;
+	}//End of Getter
+
+	public String[] getPrintSubjects()
+	{
+		return printSubjects;
+	}//End of Getter
+
+	public String[] getPrintVerbs()
+	{
+		return printVerbs;
+	}//End of Getter
+
+	public String[] getPrintPrepositions()
+	{
+		return printPrepositions;
+	}//End of Getter
+
+	public String[] getPrintObjects()
+	{
+		return printObjects;
+	}//End of Getter
+
+	public int[] getPrintLengths()
+	{
+		return printLengths;
+	}//End of Getter
+
+	public int[] getOrderQuantities()
+	{
+		return orderQuantities;
+	}//End of Getter
+
+	public double[] getOrderTotals()
+	{
+		return orderTotals;
+	}
+
+	public int getFileCount()
+	{
+		return fileCount;
+	}//End of Getter
+
+	public int getFilesFound()
+	{
+		return filesFound;
+	}//End of Getter
+
+	public int getFilesNotFound()
+	{
+		return fileCount - filesFound;
+
+	}//End of Getter
+
+	public int getSearchCount()
+	{
+		return searchCount;
+	}//End of Getter
+
+	public int getSearchesFound()
+	{
+		return searchesFound;
+	}//End of Getter
+
+	public int getSearchesNotFound()
+	{
+		return searchCount - searchesFound;
+	}//End of Getter
+
+	public int getWrittenOrderTotalQuantity()
+	{
+		int localIndex = 0;
+		int localCountTotal = 0;
+
+		while (localIndex < orderQuantities.length)
+		{
+			localCountTotal = localCountTotal + orderQuantities[localIndex];
+			localIndex++;
+		}//End of While
+		return localCountTotal;
+	}//End of Getter
+
+	public double getWrittenOrderTotalCost()
+	{
+		int localIndex = 0;
+		double localGrandTotal = 0;
+
+		while (localIndex < orderTotals.length)
+		{
+			localGrandTotal = localGrandTotal + orderTotals[localIndex];
+			localIndex++;
+		}//End of While
+		return localGrandTotal;
+	}//End of Getter
+
+
+}//End of Class
