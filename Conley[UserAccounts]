@@ -1,9 +1,9 @@
 //AUTHOR: Daniel Conley
 //COURSE: CPT187
-//CREATE DATE: 2/20/2022
+//CREATE DATE: 2/17/2022
 //PURPOSE: The full details of this UserAccounts is to allow the user to login securely using their username and password.
 
-package edu.cpt187.conley.project6;
+package edu.cpt187.conley.exercise6;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -63,6 +63,7 @@ public class UserAccounts
 	{
 		searchedIndex = getSeqSearch(borrowedUserName);
 
+
 		if (searchedIndex >= RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
 		{
 			searchedIndex = NOT_FOUND;
@@ -81,7 +82,7 @@ public class UserAccounts
 		}
 		catch (IOException ex)
 		{
-			recordCount = NOT_FOUND;
+			 recordCount = NOT_FOUND;
 		}
 	}//End of Setter
 
@@ -113,8 +114,10 @@ public class UserAccounts
 
 	public boolean getPasswordMatch(String borrowedBorrowedPassword)
 	{
-		return (borrowedBorrowedPassword.equals(passwords[searchedIndex]));
 		
+
+		return  (borrowedBorrowedPassword.equals(passwords[searchedIndex]) == true);
+
 	}//End of Getter
 
 	public String getFileName()
@@ -139,3 +142,4 @@ public class UserAccounts
 
 
 }//End of Class
+
