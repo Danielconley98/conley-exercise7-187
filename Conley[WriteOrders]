@@ -1,0 +1,60 @@
+//AUTHOR: Daniel Conley
+//COURSE: CPT187
+//CREATE DATE: 2/17/2022
+//PURPOSE: The full details of this WriteOrder would be to set the save the name of the order so it may be better organized.
+
+package edu.cpt187.conley.exercise6;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class WriteOrder {
+
+	private boolean fileFoundFlag = false;
+	private String masterFileName = " ";
+	private int recordCount = 0;
+
+	//Declaring Order
+	public WriteOrder(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}//End of declaring order
+
+	//Start of Setters
+
+	public void setWriteOrder(int borrowedItemID, String borrowedItemName, double borrowedItemPrice, int borrowedQuantity, double borrowedOrderCost)
+	{
+		try
+		{
+			PrintWriter filePW = new PrintWriter (new FileWriter(borrowedItemName, true));
+			recordCount++;
+			filePW.printf("%n%s\t%s\t%f\t%d\t%f", borrowedItemID, borrowedItemName, borrowedItemPrice, borrowedQuantity, borrowedOrderCost);
+			fileFoundFlag = true;
+			filePW.close();
+		}
+		catch (IOException ex)
+		{
+			fileFoundFlag = false;
+		}
+	}//End of setter
+	//End of Setters
+
+	//Start of Getters
+
+	public boolean getFileFoundFlag()
+	{
+		return fileFoundFlag;
+	}//End of getter
+
+	public String getFileName()
+	{
+		return masterFileName;
+	}//End of getter
+
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//End of getter
+
+}//End of Class
