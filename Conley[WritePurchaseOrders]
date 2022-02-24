@@ -1,0 +1,66 @@
+//AUTHOR: Daniel Conley
+//COURSE: CPT187
+//CREATE DATE: 2/20/2022
+//PURPOSE: The full details of this WritePurchaseOrder would be to set the save the name of the order so it may be better organized.
+
+
+//Declaring The package
+package edu.cpt187.conley.project6;
+
+//Importing File Writer
+import java.io.FileWriter;
+//Importing IOEXception
+import java.io.IOException;
+//Inporting Print Writer
+import java.io.PrintWriter;
+
+
+//Declaring the Class Name
+public class WritePurchaseOrders {
+
+	private boolean fileFoundFlag = false;
+	private String masterFileName = " ";
+	private int recordCount = 0;
+
+	//Declaring Order
+	public WritePurchaseOrders(String borrowedFileName)
+	{
+		masterFileName = borrowedFileName;
+	}//End of declaring order
+
+	//Start of Setters
+
+	public void setWriteOneRecord(String borrowedSubject, String borrowedVerb, String borrowedPreposition, String borrowedObject, int borrowedLength, int borrowedQuantity, double borrowedTotal)
+	{
+		try
+		{
+			PrintWriter filePw = new PrintWriter(new FileWriter(masterFileName, true));
+			filePw.printf("%n%s\t%s\t%s\t%s\t%d\t%d\t%f", borrowedSubject, borrowedVerb, borrowedPreposition, borrowedObject, borrowedLength, borrowedQuantity, borrowedTotal);
+			fileFoundFlag = true;
+			filePw.close();
+		}//End of Try
+		catch (IOException ex)
+		{
+			fileFoundFlag = false;
+		}//End of Catch
+
+	}//End of Setter
+	//End of Setters
+	//Start of Getters
+
+	public boolean getFileFoundFlag()
+	{
+		return fileFoundFlag;
+	}//End of getter
+
+	public String getFileName()
+	{
+		return masterFileName;
+	}//End of getter
+
+	public int getRecordCount()
+	{
+		return recordCount;
+	}//End of getter
+
+}//End of Class
