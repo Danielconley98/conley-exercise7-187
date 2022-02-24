@@ -1,0 +1,171 @@
+//AUTHOR: Daniel Conley
+//COURSE: CPT187
+//CREATE DATE: 2/10/2022
+//PURPOSE: The full details of this order would be described as to form the order for the employee who is purchasing Sod.
+
+
+//Setting the package
+package edu.cpt187.conley.exercise6;
+
+//Declaring the class of Order
+public class Order
+{
+	//Declaring Class Constants
+	private final double TAX_RATE = 0.075;    //The tax rate.
+
+	private int itemID = 0;                   //The ID of the item
+	private int discountType;                 //The type of discount
+	private String itemName = " ";            //The name of the item
+	private double itemPrice = 0;             //The price of the item
+	private String discountName = " ";        //The name of the discount
+	private double discountRate = 0;          //The discount rate
+	private int howMany = 0;                  //How many items are being purchased
+	private int lastItemSelectedIndex = 0;    //The last item selected 
+	private String prizeName = " ";           //The name of the prize
+
+	//Declaring Order
+	public Order()
+	{
+	}//End of declaring order
+
+	//Setters
+
+	//Setting last item selected index
+	public void setLastItemSelectedIndex(int borrowedSearchIndex)
+	{
+		lastItemSelectedIndex = borrowedSearchIndex;
+	}//End of Setter
+
+	//Setting item ID
+	public void setItemID(int[] borrowedItemIDs)
+	{
+		itemID = borrowedItemIDs[lastItemSelectedIndex];
+	}//End of Setter
+
+	//Setting item name
+	public void setItemName(String[] borrowedItemNames)
+	{
+		itemName = borrowedItemNames[lastItemSelectedIndex];
+	}//End of Setter
+
+	//Setting item price
+	public void setItemPrice(double[] borrowedItemPrices)
+	{
+		itemPrice = borrowedItemPrices[lastItemSelectedIndex];
+	}//End of Setter
+
+	//Setting how many
+	public void setHowMany(int borrowedHowMany)
+	{
+		howMany = borrowedHowMany;
+	}//End of Setter
+
+	//Setting discount type
+	public void setDiscountType(char borrowedMenuSelection)
+	{
+		discountType = borrowedMenuSelection - 'A';
+	}//End of Setter
+
+	//Setting discount name
+	public void setDiscountName(String[] borrowedDiscountNames)
+	{
+
+		discountName = borrowedDiscountNames[discountType];
+	}//End of Setter
+
+	//Setting Discount Rate
+	public void setDiscountRate(double[] borrowedDiscountRate)
+	{
+		discountRate = borrowedDiscountRate[lastItemSelectedIndex];
+	}//End of Setter
+
+	//Setting Prize name
+	public void setPrizeName(String[] borrowedPrizenames, int borrowedPrizeIndex)
+	{
+
+		prizeName = borrowedPrizenames[borrowedPrizeIndex];
+	}//End of Setter
+
+	//Setting decrease in stock
+	public void setDecreaseInStock(Inventory bororwedInventoryObject)
+	{
+		bororwedInventoryObject.setReduceStock(howMany);
+
+	}//End of Setter
+
+	//End of Setters
+
+	//Start of Getters
+	public int getInStockCount(int[] borrowedInStockCounts)
+	{
+		return borrowedInStockCounts[lastItemSelectedIndex];
+	}//End of getter
+
+	public int getItemID()
+	{
+		return itemID;
+	}//End of Getter
+	public String getItemName()
+	{
+		return itemName;
+	}//End of Getter
+
+	public double getItemPrice()
+	{
+		return itemPrice;
+	}//End of Getter
+
+	public String getDiscountName()
+	{
+		return discountName;
+	}//End of Getter
+
+	public double getDiscountRate()
+	{
+		return discountRate;
+	}//End of Getter
+
+	public int getHowMany()
+	{
+		return howMany;
+	}//End of Getter
+
+	public double getDiscountAmt()
+	{
+		return discountRate*itemPrice;
+	}//End of Getter
+
+	public double getDiscountPrice()
+	{
+		return itemPrice - getDiscountAmt();
+	}//End of Getter
+
+	public double getSubTotal()
+	{
+		return getDiscountPrice()*howMany;
+	}//End of Getter
+
+	public double getTaxRate()
+	{
+		return TAX_RATE;
+	}//End of Getter
+
+	public double getTaxAmt()
+	{
+		return TAX_RATE*getSubTotal();
+	}//End of Getter
+
+	public double getTotalCost()
+	{
+		return getTaxAmt()+getSubTotal();
+	}//End of Getter
+
+	public String getPrizeName()
+	{
+		return prizeName;
+	}//End of Getter
+
+	//End of Getters
+
+
+}//End of Class
