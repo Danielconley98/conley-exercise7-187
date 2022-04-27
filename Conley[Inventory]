@@ -1,6 +1,6 @@
 //AUTHOR: Daniel Conley
 //COURSE: CPT187
-//CREATE DATE: 2/17/2022
+//CREATE DATE: 4/27/2022
 //PURPOSE: The full details of this class would be described as to form the inventory for the employee who is purchasing Sod. That is, it keeps in inventory.  An inventory being a thing that keeps track of the stock.  Kind of like a warehouse, used to store things, but digital.  
 
 //Setting the Package
@@ -37,8 +37,8 @@ public class Inventory
 	private int[] orderQuantities = new int[MAX_RECORDS];    //The array for order quantities
 	private double[] orderTotals = new double[MAX_RECORDS];  //The array for order totals
 	private int[] inStockCounts = new int[MAX_RECORDS];      //The array for stock counts
-	private int itemSearchIndex = RESET_VALUE;                         //The search index
-	private int recordCount = RESET_VALUE;                             //The count of records
+	private int itemSearchIndex = 0;                         //The search index
+	private int recordCount = 0;                             //The count of records
 	private Random prizeGenerator = new Random();            //Random prize generator
 
 	//Declaring Inventory
@@ -57,23 +57,24 @@ public class Inventory
 	//Setting load Items
 	public void setLoadItems(String borrowedFileName)
 	{
+		//Try Statement
 		try
 		{
 			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
 			recordCount = RESET_VALUE;
-
+			//While Statement
 			while (infile.hasNext() == true && recordCount < MAX_RECORDS)
 			{
 				itemIDs[recordCount] = infile.nextInt();
-				itemNames[recordCount] = infile.next().toString();
+				itemNames[recordCount] = infile.next();
 				itemPrices[recordCount] = infile.nextDouble();
 				inStockCounts[recordCount] = infile.nextInt();
 				recordCount++;
 			}//End of While
-			setBubbleSort();
-			getBinSearch(borrowedFileName);
 
 			infile.close();
+			setBubbleSort();
+
 		}//End of Try
 		catch (IOException ex)
 		{
@@ -85,26 +86,28 @@ public class Inventory
 	//Setting load Items
 	public void setLoadItems(String borrowedFileName, int borrowedSize)
 	{
+		//Try statement
 		try
 		{
 			recordCount = RESET_VALUE;
 			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
 
-
+			//While Statement
 			while (infile.hasNext() == true && recordCount < MAX_RECORDS && recordCount < borrowedSize)
 			{
 
 				itemIDs[recordCount] = infile.nextInt();
-				itemNames[recordCount] = infile.next().toString();
+				itemNames[recordCount] = infile.next();
 				itemPrices[recordCount] = infile.nextDouble();
-				inStockCounts[recordCount] = infile.nextInt();
+				orderQuantities[recordCount] = infile.nextInt();
+				orderTotals[recordCount] = infile.nextDouble();
 				recordCount++;
 			}//End of while
-			setBubbleSort();
-			getBinSearch(borrowedFileName);
-
+			
 			infile.close();
+			setBubbleSort();
 		}//End of Try
+		//Catch Statement
 		catch (IOException ex)
 		{
 			recordCount = NOT_FOUND;
@@ -113,9 +116,10 @@ public class Inventory
 	}//End of Setter
 
 	//Setting Search Index
-	public void setSearchIndex(int borrowedID)
+	public void setSearchIndex(String borrowedID)
 	{
-		itemSearchIndex= borrowedID;
+		getBinSearch(borrowedID);
+		itemSearchIndex = Integer.parseInt(borrowedID);
 
 	}//End of Setter
 
@@ -132,7 +136,7 @@ public class Inventory
 			localSwap = false;
 			while (localIndex < localLast)
 			{
-				if (orderTotals[localIndex] > orderTotals[localIndex + ONE])
+				if (itemIDs[localIndex] > itemIDs[localIndex + ONE])
 				{
 					setSwapArrayElements(localIndex);
 					localSwap = true;
@@ -154,8 +158,12 @@ public class Inventory
 	public void setSwapArrayElements(int borrowedIndex)
 	{
 		double aLocalDouble = RESET_VALUE;
+		double aSecondLocalDouble = RESET_VALUE;
 		String aLocalString = " ";
 		int aLocalInt = RESET_VALUE;
+		int aSecondLocalInt = RESET_VALUE;
+		int aThirdLocalInt = RESET_VALUE;
+
 
 		aLocalDouble = orderTotals[borrowedIndex];
 		orderTotals[borrowedIndex] = orderTotals[borrowedIndex + ONE];
@@ -169,17 +177,17 @@ public class Inventory
 		itemNames[borrowedIndex] = itemNames[borrowedIndex + ONE];
 		itemNames[borrowedIndex + ONE] = aLocalString;
 
-		aLocalDouble = itemPrices[borrowedIndex];
+		aSecondLocalDouble = itemPrices[borrowedIndex];
 		itemPrices[borrowedIndex] = itemPrices[borrowedIndex + ONE];
-		itemPrices[borrowedIndex + ONE] = aLocalDouble;
+		itemPrices[borrowedIndex + ONE] = aSecondLocalDouble;
 
-		aLocalInt = orderQuantities[borrowedIndex];
+		aSecondLocalInt = orderQuantities[borrowedIndex];
 		orderQuantities[borrowedIndex] = orderQuantities[borrowedIndex + ONE];
-		orderQuantities[borrowedIndex + ONE] = aLocalInt;
+		orderQuantities[borrowedIndex + ONE] = aSecondLocalInt;
 
-		aLocalInt = inStockCounts[borrowedIndex];
+		aThirdLocalInt = inStockCounts[borrowedIndex];
 		inStockCounts[borrowedIndex] = inStockCounts[borrowedIndex + ONE];
-		inStockCounts[borrowedIndex + ONE] = aLocalInt;
+		inStockCounts[borrowedIndex + ONE] = aThirdLocalInt;
 	}//End of Setter
 
 	//End of Setters
@@ -202,17 +210,15 @@ public class Inventory
 			{
 				localFound = true;
 			}//End of If
+			
+			else if(itemNames[localMid].compareToIgnoreCase(borrowedBorrowedID) < 0)
+			{
+				localFirst = localMid + ONE;
+			}//End of if
 			else
 			{
-				if(itemNames[localMid].compareToIgnoreCase(borrowedBorrowedID) < 0)
-				{
-					localFirst = localMid + ONE;
-				}//End of if
-				else
-				{
-					localLast = localMid - ONE;
-				}//End of else
-			}//End of Else
+				localLast = localMid - ONE;
+			}//End of else
 		}//End of while
 		if (localFound == false)
 		{
@@ -292,7 +298,7 @@ public class Inventory
 		int localIndex = RESET_VALUE;
 		double localGrandTotal = RESET_VALUE;
 
-		while (localIndex < itemNames.length)
+		while (localIndex < orderTotals.length)
 		{
 			localGrandTotal = localGrandTotal + orderTotals[localIndex];
 			localIndex++;
