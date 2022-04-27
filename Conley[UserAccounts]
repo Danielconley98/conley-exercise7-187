@@ -1,37 +1,38 @@
 //AUTHOR: Daniel Conley
 //COURSE: CPT187
-//CREATE DATE: 2/17/2022
+//CREATE DATE: 4/27/2022
 //PURPOSE: The full details of this UserAccounts is to allow the user to login securely using their username and password.
 
+//Delcaring Package
 package edu.cpt187.conley.exercise6;
-
+//Imports
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
+//Declaring Class
 public class UserAccounts
 {
+//Declaring classwide Variables
+	private final int NOT_FOUND = -1;                           //The value for not found
+	private final int RESET_VALUE = 0;							//The Reset value
+	private final int MAXIMUM_RECORDS = 50;						//The maximum number of records
 
-	private final int NOT_FOUND = -1;
-	private final int RESET_VALUE = 0;
-	private final int MAXIMUM_RECORDS = 50;
+	private String[] userNames = new String[MAXIMUM_RECORDS];	//The usernames
+	private String[] passwords = new String[MAXIMUM_RECORDS];	//The Passwords
+	private String masterFileName = "";							//The programs Master File Name
+	private int recordCount = 0;								//The number of records
+	private int searchedIndex = 0;								//The current searchdinex
 
-	private String[] userNames = new String[MAXIMUM_RECORDS];
-	private String[] passwords = new String[MAXIMUM_RECORDS];
-	private String masterFileName = "";
-	private int recordCount = 0;
-	private int searchedIndex = 0;
-
-	//Declaring Order
+	//Declaring Order (USER ACCOUTNS)
 	public UserAccounts(String borrowedFileName)
 	{
 		masterFileName = borrowedFileName;
 	}//End of declaring order
 
 	//Begin Setters
-
+	//Start of Setter (USER ACCOUNTS)
 	public void setUserAccountArrays()
 	{
 		try
@@ -52,13 +53,13 @@ public class UserAccounts
 			recordCount = NOT_FOUND;
 		}//End of Catch
 
-	}//End of Setter
-
+	}//End of Setter (User Account Arrays)
+	//Start of setter (SEARCHED INDEX)
 	public void setSearchedIndex(String borrowedUserName)
 	{
 		searchedIndex = getSeqSearch(borrowedUserName);
-	}//End of Setter
-
+	}//End of Setter (SEARCHED INDEX)
+	//Start of setter (Searched Index)
 	public void setSearchedIndex(String borrowedUserName, String borrowedPassword)
 	{
 		searchedIndex = getSeqSearch(borrowedUserName);
@@ -69,8 +70,8 @@ public class UserAccounts
 			searchedIndex = NOT_FOUND;
 		}//End of if
 
-	}//End of Setter
-
+	}//End of Setter(SEARCHED INDEX)
+	//Start of setter (WRITE ONE RECORD)
 	public void setWriteOneRecord(String borrowedUserName, String borrowedPassword)
 	{
 		try
@@ -84,12 +85,12 @@ public class UserAccounts
 		{
 			 recordCount = NOT_FOUND;
 		}
-	}//End of Setter
+	}//End of Setter (WRITE ONE RECORD)
 
 	//End of Setters
 
 	//Start Getters
-
+	//Start of setter SEQSEARCH
 	public int getSeqSearch(String borrowedBorrowedUserName)
 	{
 		//Setting local variables
@@ -98,7 +99,7 @@ public class UserAccounts
 
 		while (localIndex < recordCount)
 		{
-			if (borrowedBorrowedUserName.equalsIgnoreCase(userNames[localIndex]))
+			if (userNames[localIndex].equalsIgnoreCase(borrowedBorrowedUserName))
 			{
 				localFound = localIndex;
 				localIndex = recordCount;
@@ -110,36 +111,35 @@ public class UserAccounts
 		}//End of while
 
 		return localFound;
-	}//End of Getter
-
+	}//End of Getter (SEQSEARCH)
+	//Start of getter (PASSWORD MATCH)
 	public boolean getPasswordMatch(String borrowedBorrowedPassword)
 	{
 		
 
-		return  (borrowedBorrowedPassword.equals(passwords[searchedIndex]) == true);
+		return  (passwords[searchedIndex].equalsIgnoreCase(borrowedBorrowedPassword));
 
-	}//End of Getter
-
+	}//End of Getter (PASSWORD MATCH)
+	//Start of getter FILE NAME
 	public String getFileName()
 	{
 		return masterFileName;
-	}//End of Getter
-
+	}//End of Getter (FILE NAME)
+	//Start of getter MEXIMUM RECORDS
 	public int getMaximumRecords()
 	{
 		return MAXIMUM_RECORDS;
-	}//End of Getter
-
+	}//End of Getter (MAXIMUM RECORDS)
+	//Start of getter (RECORD COUNT)
 	public int getRecordCount()
 	{
 		return recordCount;
-	}//End of Getter
-
+	}//End of Getter (RECORD COUNT)
+	//Start of getter Searched Index
 	public int getSearchedIndex()
 	{
 		return searchedIndex;
-	}//End of Getter
+	}//End of Getter (SEARCHED INDEX)
 
 
 }//End of Class
-
